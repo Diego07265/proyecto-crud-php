@@ -1,8 +1,8 @@
 <?php
-$host = "localhost:8080";
+$host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "pharmatrack";
+$db   = "DrogueriaPharmaTrack";
 
 $conn = new mysqli($host, $user, $pass, $db);
 
