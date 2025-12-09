@@ -45,7 +45,6 @@ try {
                         <th>Acciones</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     <?php foreach ($productos as $producto): ?>
                         <tr>
@@ -54,19 +53,12 @@ try {
                             <td><?= htmlspecialchars((string)$producto['categoria_id']) ?></td>
                             <td><?= htmlspecialchars((string)$producto['precio']) ?></td>
                             <td><?= htmlspecialchars((string)$producto['stock']) ?></td>
-                            <td><?= htmlspecialchars($producto['fecha_vencimiento']) ?></td>
+                            <td><?= htmlspecialchars((string)$producto['fecha_vencimiento']) ?></td>
                             <td><?= $producto['requiere_receta'] ? 'Sí' : 'No' ?></td>
                             <td><?= htmlspecialchars((string)$producto['id_proveedor']) ?></td>
-
                             <td>
-                                <a href="edit.php?id=<?= urlencode($producto['producto_id']) ?>" 
-                                   class="btn btn-sm btn-warning">Editar</a>
-
-                                <a href="delete.php?id=<?= urlencode($producto['producto_id']) ?>" 
-                                   class="btn btn-sm btn-danger"
-                                   onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
-                                   Eliminar
-                                </a>
+                                <a href="edit.php?id=<?= urlencode((string)$producto['producto_id']) ?>" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="delete.php?id=<?= urlencode((string)$producto['producto_id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
