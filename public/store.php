@@ -1,6 +1,9 @@
 <?php
+
 declare(strict_types=1);
 require_once __DIR__ . '/../config/bd.php';
+
+/** @var PDO $bd */
 
 try {
     // Recibir datos del formulario y convertir a tipos correctos
@@ -21,7 +24,7 @@ try {
     $sql = "INSERT INTO producto 
             (nombre, categoria_id, precio, stock, fecha_vencimiento, requiere_receta, id_proveedor) 
             VALUES (:nombre, :categoria_id, :precio, :stock, :fecha_vencimiento, :requiere_receta, :id_proveedor)";
-    
+
     $stmt = $bd->prepare($sql);
     $stmt->execute([
         ':nombre' => $nombre,
@@ -36,7 +39,6 @@ try {
     // Redirigir al index si todo está bien
     header("Location: index.php");
     exit;
-
 } catch (Exception $e) {
     echo "<div class='alert alert-danger m-5'>Error al guardar el producto: " . htmlspecialchars($e->getMessage()) . "</div>";
 }
