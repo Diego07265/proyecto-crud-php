@@ -126,6 +126,63 @@ pharmatrack_app/
 - ✅ **Error Handling**: Manejo de excepciones con try-catch
 - ✅ **urlencode()**: Codificación segura de parámetros URL
 
+## 🔄 Métodos HTTP GET/POST
+
+### GET - Solicitud de Información
+- **Uso**: Obtener datos del servidor sin modificarlos
+- **Seguridad**: Los parámetros son visibles en la URL
+- **Ejemplos en el proyecto**:
+  - `index.php` - Carga y muestra lista de productos
+  - `create.php` - Formulario para crear producto
+  - `edit.php?id=1` - Obtiene y muestra producto específico para editar
+  - `delete.php?id=1` - Obtiene producto para confirmar eliminación
+
+### POST - Envío de Información
+- **Uso**: Enviar datos al servidor para crear o modificar recursos
+- **Seguridad**: Los datos se envían en el cuerpo de la solicitud (no en URL)
+- **Ejemplos en el proyecto**:
+  - `create.php` → `store.php` (POST) - Crear nuevo producto
+  - `edit.php` → `update.php` (POST) - Actualizar producto existente
+  - `delete.php` (POST) - Confirmar eliminación de producto
+
+### Tabla de Flujos HTTP
+
+| Página | Método | Acción | Destino |
+|--------|--------|--------|---------|
+| index.php | GET | Listar productos | Muestra tabla |
+| create.php | GET | Mostrar formulario | Formulario HTML |
+| store.php | POST | Guardar producto | BD + Redirección |
+| edit.php | GET | Mostrar formulario edición | Formulario pre-rellenado |
+| update.php | POST | Actualizar producto | BD + Redirección |
+| delete.php | GET/POST | Eliminar producto | BD + Redirección |
+
+### Implementación en el Código
+
+**Formulario en `create.php` (usa POST):**
+```php
+<form action="store.php" method="post">
+    <input type="text" name="nombre" required>
+    <input type="number" name="precio" step="0.01" required>
+    <!-- más campos -->
+    <button type="submit">Guardar Producto</button>
+</form>
+```
+
+**Enlaces en `index.php` (usan GET):**
+```php
+<a href="edit.php?id=<?= urlencode($producto['producto_id']) ?>" class="btn btn-warning">Editar</a>
+<a href="delete.php?id=<?= urlencode($producto['producto_id']) ?>" class="btn btn-danger">Eliminar</a>
+```
+
+**Procesamiento en `store.php` (recibe POST):**
+```php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nombre = $_POST['nombre'] ?? '';
+    $precio = $_POST['precio'] ?? '';
+    // Validar y guardar en BD
+}
+```
+
 ## 📝 Archivos Clave
 
 ### `config/bd.php`
