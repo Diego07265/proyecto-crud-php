@@ -1,8 +1,10 @@
 <?php
-require_once __DIR__ . '/../config/bd.php';
+require_once "../config/bd.php";
 
-try {
-    echo "Conexión exitosa a la base de datos!";
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-}
+echo "<h2>Conexión a la base de datos EXITOSA </h2>";
+
+$stmt = $pdo->query("SELECT COUNT(*) AS total FROM producto");
+$r = $stmt->fetch();
+
+echo "Registros en producto: " . $r['total'];
+

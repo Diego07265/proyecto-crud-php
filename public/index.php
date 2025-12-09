@@ -4,9 +4,13 @@ declare(strict_types=1);
 require_once __DIR__ . '/../config/bd.php';
 
 //Obtener todos los productos 
-
-$stmt = $bd->query('SELECT * FROM producto ORDER BY producto_id DESC');
+try {
+$stmt = $pdo->query('SELECT * FROM producto ORDER BY producto_id DESC');
 $productos = $stmt->fetchAll();
+} catch (PDOException $e) {
+    echo "Error al obtener los productos: " . htmlspecialchars($e->getMessage());
+    $productos = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
