@@ -2,77 +2,83 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../config/bd.php';
 
-// Validar ID
-$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+// Validar ID recibido
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($id <= 0) {
-    die("ID inválido.");
+    echo "<div class='container mt-3'><div class='alert alert-danger'>ID inválido.</div></div>";
+    exit;
 }
 
-// Obtener el producto
-$stmt = $pdo->prepare("SELECT * FROM producto WHERE producto_id = :id");
-$stmt->execute(['id' => $id]);
-$producto = $stmt->fetch();
+try {
+    $sql = 'SELECT * FROM producto WHERE producto_id = :id LIMIT 1';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    $producto = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$producto) {
-    die("Producto no encontrado.");
+    if (!$producto) {
+        echo "<div class='container mt-3'><div class='alert alert-warning'>Producto no encontrado.</div></div>";
+        exit;
+    }
+
+} catch (PDOException $e) {
+    echo "<div class='container mt-3'><div class='alert alert-danger'>Error: " . htmlspecialchars($e->getMessage()) . "</div></div>";
+    exit;
 }
 ?>
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Editar Producto</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <meta charset="utf-8">
+  <title>Editar Producto</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 </head>
 <body>
+<div class="container mt-4">
+  <h1>Editar Producto</h1>
 
-<div class="container mt-5">
-    <h1 class="mb-4">Editar Producto</h1>
+  <form action="update.php" method="post">
+    <input type="hidden" name="producto_id" value="<?= htmlspecialchars((string)$producto['producto_id']) ?>">
 
-    <form action="update.php" method="POST">
-        <input type="hidden" name="producto_id" value="<?= htmlspecialchars($producto['producto_id']) ?>">
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input name="nombre" class="form-control" value="<?= htmlspecialchars($producto['nombre']) ?>">
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" name="nombre" required value="<?= htmlspecialchars($producto['nombre']) ?>">
-        </div>
+    <div class="mb-3">
+      <label class="form-label">Categoría ID</label>
+      <input name="categoria_id" type="number" class="form-control" value="<?= htmlspecialchars((string)$producto['categoria_id']) ?>">
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Categoria ID</label>
-            <input type="number" class="form-control" name="categoria_id" required value="<?= htmlspecialchars($producto['categoria_id']) ?>">
-        </div>
+    <div class="mb-3">
+      <label class="form-label">Precio</label>
+      <input name="precio" type="number" step="0.01" class="form-control" value="<?= htmlspecialchars((string)$producto['precio']) ?>">
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Precio</label>
-            <input type="number" step="0.01" class="form-control" name="precio" required value="<?= htmlspecialchars($producto['precio']) ?>">
-        </div>
+    <div class="mb-3">
+      <label class="form-label">Stock</label>
+      <input name="stock" type="number" class="form-control" value="<?= htmlspecialchars((string)$producto['stock']) ?>">
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Stock</label>
-            <input type="number" class="form-control" name="stock" required value="<?= htmlspecialchars($producto['stock']) ?>">
-        </div>
+    <div class="mb-3">
+      <label class="form-label">Fecha de vencimiento</label>
+      <input name="fecha_vencimiento" type="date" class="form-control" value="<?= htmlspecialchars((string)$producto['fecha_vencimiento']) ?>">
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Fecha de Vencimiento</label>
-            <input type="date" class="form-control" name="fecha_vencimiento" value="<?= htmlspecialchars($producto['fecha_vencimiento']) ?>">
-        </div>
+    <div class="form-check mb-3">
+      <input id="rec" name="requiere_receta" type="checkbox" class="form-check-input" <?= $producto['requiere_receta'] ? 'checked' : '' ?> value="1">
+      <label class="form-check-label" for="rec">Requiere receta</label>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Proveedor ID</label>
-            <input type="number" class="form-control" name="id_proveedor" required value="<?= htmlspecialchars($producto['id_proveedor']) ?>">
-        </div>
+    <div class="mb-3">
+      <label class="form-label">ID Proveedor</label>
+      <input name="id_proveedor" type="number" class="form-control" value="<?= htmlspecialchars((string)$producto['id_proveedor']) ?>">
+    </div>
 
-        <div class="form-check mb-3">
-            <input type="checkbox" class="form-check-input" name="requiere_receta" <?= $producto['requiere_receta'] ? 'checked' : '' ?>>
-            <label class="form-check-label">Requiere Receta</label>
-        </div>
-
-        <button type="submit" class="btn btn-success">Guardar Cambios</button>
-        <a href="index.php" class="btn btn-secondary">Volver</a>
-    </form>
-
+    <button class="btn btn-success">Guardar</button>
+    <a class="btn btn-secondary" href="index.php">Cancelar</a>
+  </form>
 </div>
 
+<script src="assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -57,13 +57,18 @@ try {
                             <td><?= $producto['requiere_receta'] ? 'Sí' : 'No' ?></td>
                             <td><?= htmlspecialchars((string)$producto['id_proveedor']) ?></td>
                             <td>
-                                <a href="edit.php?id=<?= urlencode((string)$producto['producto_id']) ?>" class="btn btn-warning btn-sm">Editar</a>
-                                <a href="delete.php?id=<?= urlencode((string)$producto['producto_id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+                                <a href="edit.php?id=<?= urlencode((string)$producto['producto_id']) ?>"
+                                    class="btn btn-warning btn-sm">Editar</a>
+
+                                <a href="delete.php?id=<?= urlencode((string)$producto['producto_id']) ?>"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Estás seguro?')">Eliminar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
+
         <?php endif; ?>
     </div>
 </body>
