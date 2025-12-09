@@ -24,7 +24,7 @@ declare(strict_types=1);
                 <input type="text" class="form-control" id="nombre" name="nombre" required>
             </div>
 
-            <div class="mb-3"></div>
+            <div class="mb-3">
                 <label for="categoria_id" class="form-label">Categoria ID</label>
                 <input type="number" class="form-control" id="categoria_id" name="categoria_id" required>
             </div>
